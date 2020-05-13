@@ -4,11 +4,15 @@ import axios from "axios";
 
 import Charts from "./components/Charts";
 import Navbar from "./components/Navbar";
+//STRETCH: Added Events component import
+import Events from "./components/Events";
 
 import "./styles.scss";
 
 const App = () => {
+  //STRETCH: Added additional call to Coin Gecko API
   const [coinData, setCoinData] = useState([]);
+  const [eventData, setEventData] = useState([]);
 
   useEffect(() => {
     axios
@@ -17,11 +21,24 @@ const App = () => {
       )
       .then(res => setCoinData(res.data))
       .catch(err => console.log(err));
+    axios
+      .get(
+        "https://api.coingecko.com/api/v3/events?type=Conference"
+      )
+      .then(res2 => {
+        //console.log(res2.data.data)
+        setEventData(res2.data.data)
+      })
+      .catch(err => console.log(err));
+    // console.log(coinData);
+    // console.log(eventData);  
   }, []);
   return (
     <div className="App">
       <Navbar />
       <Charts coinData={coinData} />
+      {/* STRETCH: Add Events Component */}
+      <Events eventData={eventData} />
     </div>
   );
 };
